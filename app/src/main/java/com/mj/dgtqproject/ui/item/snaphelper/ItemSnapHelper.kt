@@ -22,7 +22,8 @@ class ItemSnapHelper(private val itemLayoutProperties : ItemLayoutProperties) : 
     ): Int {
         val snapPosition = super.findTargetSnapPosition(layoutManager, velocityX, velocityY)
         loadNextOrPreviousPage(snapPosition, velocityX)
-        return snapPosition
+        val page = snapPosition / pageSize
+        return page * pageSize
     }
 
     private fun loadNextOrPreviousPage(snapPosition: Int, velocityX: Int) {
