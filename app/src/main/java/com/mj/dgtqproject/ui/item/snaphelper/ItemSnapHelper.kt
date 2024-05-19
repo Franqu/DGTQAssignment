@@ -8,10 +8,10 @@ class ItemSnapHelper(pageSize : Int) : LinearSnapHelper() {
     private val pageSize = pageSize
 
     override fun findTargetSnapPosition(
-        layoutManager: RecyclerView.LayoutManager,
+        layoutManager: RecyclerView.LayoutManager?,
         velocityX: Int,
         velocityY: Int
     ): Int {
-       TODO()
+        return super.findTargetSnapPosition(layoutManager, velocityX, velocityY)
     }
 }
