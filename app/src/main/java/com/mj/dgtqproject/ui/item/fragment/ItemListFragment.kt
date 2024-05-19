@@ -20,11 +20,11 @@ import java.util.Collections
 
 private const val COLUMN_COUNT = 2
 private const val ROW_COUNT = 5
-private const val PAGE_SIZE = COLUMN_COUNT * ROW_COUNT
 
 class ItemListFragment : Fragment() {
     private lateinit var binding: FragmentItemListBinding
     private lateinit var viewModel: ItemViewModel
+    private val itemLayoutProperties = ItemLayoutProperties(ROW_COUNT, COLUMN_COUNT, false)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,8 +33,8 @@ class ItemListFragment : Fragment() {
         binding = FragmentItemListBinding.inflate(inflater, container, false)
 
         binding.rvItems.layoutManager = HorizontalGridLayoutManager(requireContext(),
-            COLUMN_COUNT, ROW_COUNT, false)
-        val snapHelper = ItemSnapHelper(PAGE_SIZE)
+            COLUMN_COUNT,  itemLayoutProperties.reverseLayout)
+        val snapHelper = ItemSnapHelper(itemLayoutProperties.pageSize)
         snapHelper.attachToRecyclerView(binding.rvItems)
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
@@ -42,7 +42,7 @@ class ItemListFragment : Fragment() {
 
 
         viewModel.itemList.observe(viewLifecycleOwner) {
-            val itemAdapter = ItemAdapter(requireContext(), it , COLUMN_COUNT, ROW_COUNT)
+            val itemAdapter = ItemAdapter(requireContext(), it , itemLayoutProperties)
 
             binding.rvItems.adapter = itemAdapter
         }

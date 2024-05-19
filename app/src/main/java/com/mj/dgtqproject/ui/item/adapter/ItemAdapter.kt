@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mj.dgtqproject.data.item.model.Item
 import com.mj.dgtqproject.databinding.ItemLayoutBinding
+import com.mj.dgtqproject.ui.item.fragment.ItemLayoutProperties
 
 class ItemAdapter(
     private var context: Context,
     var itemList: List<Item>,
-    columnCount: Int,
-    rowCount: Int
+    itemLayoutProperties: ItemLayoutProperties
 ) : RecyclerView.Adapter<ItemAdapter.CardViewHolder>() {
 
     private var currentPage = 0
-    private val itemsPerPage = columnCount * rowCount
+    private val itemsPerPage = itemLayoutProperties.columnCount * itemLayoutProperties.rowCount
 
     inner class CardViewHolder(var view: ItemLayoutBinding) : RecyclerView.ViewHolder(view.root)
 
