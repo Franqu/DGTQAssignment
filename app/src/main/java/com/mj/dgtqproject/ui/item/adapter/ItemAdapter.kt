@@ -11,11 +11,11 @@ import com.mj.dgtqproject.ui.item.fragment.ItemLayoutProperties
 class ItemAdapter(
     private var context: Context,
     var itemList: List<Item>,
-    itemLayoutProperties: ItemLayoutProperties
+    private val itemLayoutProperties: ItemLayoutProperties
 ) : RecyclerView.Adapter<ItemAdapter.CardViewHolder>() {
 
     private var currentPage = 0
-    private val itemsPerPage = itemLayoutProperties.columnCount * itemLayoutProperties.rowCount
+    private val itemsPerPage = itemLayoutProperties.pageSize
 
     inner class CardViewHolder(var view: ItemLayoutBinding) : RecyclerView.ViewHolder(view.root)
 
@@ -30,8 +30,10 @@ class ItemAdapter(
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        val realPosition = currentPage * itemsPerPage + position
-        val product = itemList[realPosition]
+        val positionRearrangedToFirstlyFillWholeColumn =
+            getPositionRearrangedToFirstlyFillWholeColumn(position)
+        if (positionRearrangedToFirstlyFillWholeColumn >= itemList.size) return
+        val product = itemList[positionRearrangedToFirstlyFillWholeColumn]
         val view = holder.view
 
         view.tvName.text = product.name
@@ -42,7 +44,30 @@ class ItemAdapter(
         notifyDataSetChanged()
     }
 
-    fun getRealPosition(position: Int): Int {
-        return currentPage * itemsPerPage + position
+    fun getPositionRearrangedToFirstlyFillWholeColumn(position: Int): Int {
+        val totalItems = itemList.size
+        val totalFullPages = totalItems / itemsPerPage
+        val itemsOnLastPage = totalItems % itemsPerPage
+
+        return if (currentPage < totalFullPages || itemsOnLastPage == 0) {
+            getPositionRearrangedWhenThereAreNoItemsOnLastPage(position)
+        } else {
+            getPositionRearrangedWhenThereAreItemsOnLastPage(position, itemsOnLastPage)
+        }
+    }
+
+    private fun getPositionRearrangedWhenThereAreItemsOnLastPage(
+        position: Int,
+        itemsOnLastPage: Int
+    ): Int {
+        val row = position / (itemsOnLastPage / itemLayoutProperties.columnCount)
+        val column = position % (itemsOnLastPage / itemLayoutProperties.columnCount)
+        return currentPage * itemsPerPage + column * (itemsOnLastPage / itemLayoutProperties.columnCount) + row
+    }
+
+    private fun getPositionRearrangedWhenThereAreNoItemsOnLastPage(position: Int): Int {
+        val row = position / itemLayoutProperties.columnCount
+        val column = position % itemLayoutProperties.columnCount
+        return currentPage * itemsPerPage + column * (itemsPerPage / itemLayoutProperties.columnCount) + row
     }
 }

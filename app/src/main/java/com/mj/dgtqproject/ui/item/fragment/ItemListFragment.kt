@@ -34,7 +34,7 @@ class ItemListFragment : Fragment() {
 
         binding.rvItems.layoutManager = HorizontalGridLayoutManager(requireContext(),
             COLUMN_COUNT,  itemLayoutProperties.reverseLayout)
-        val snapHelper = ItemSnapHelper(itemLayoutProperties.pageSize)
+        val snapHelper = ItemSnapHelper(itemLayoutProperties)
         snapHelper.attachToRecyclerView(binding.rvItems)
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)

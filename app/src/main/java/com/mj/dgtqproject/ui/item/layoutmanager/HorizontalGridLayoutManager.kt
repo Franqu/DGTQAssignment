@@ -10,6 +10,4 @@ class HorizontalGridLayoutManager(context: Context, columnCount: Int, reverseLay
     override fun supportsPredictiveItemAnimations(): Boolean {
         return true
     }
-
-
 }

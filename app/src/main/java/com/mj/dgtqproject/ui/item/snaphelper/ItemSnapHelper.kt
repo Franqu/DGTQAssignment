@@ -3,10 +3,12 @@ package com.mj.dgtqproject.ui.item.snaphelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mj.dgtqproject.ui.item.adapter.ItemAdapter
+import com.mj.dgtqproject.ui.item.fragment.ItemLayoutProperties
 
-class ItemSnapHelper(private val pageSize: Int) : LinearSnapHelper() {
+class ItemSnapHelper(private val itemLayoutProperties : ItemLayoutProperties) : LinearSnapHelper() {
 
     private var recyclerView: RecyclerView? = null
+    private val pageSize = itemLayoutProperties.pageSize
 
     override fun attachToRecyclerView(recyclerView: RecyclerView?) {
         super.attachToRecyclerView(recyclerView)
@@ -25,10 +27,13 @@ class ItemSnapHelper(private val pageSize: Int) : LinearSnapHelper() {
 
     private fun loadNextOrPreviousPage(snapPosition: Int, velocityX: Int) {
         val adapter = recyclerView?.adapter as? ItemAdapter
-        val realPosition = adapter?.getRealPosition(snapPosition ?: 0)
+        val realPosition = adapter?.getPositionRearrangedToFirstlyFillWholeColumn(snapPosition ?: 0)
         val minPage = 0
-        var maxPage = getMaxPage(adapter)
-        val newPage = if (velocityX > 0) realPosition?.div(pageSize)?.plus(1)
+        val maxPage = getMaxPage(adapter)
+
+        val newPage =
+            if ((velocityX > 0 && !itemLayoutProperties.reverseLayout) || (velocityX < 0 && itemLayoutProperties.reverseLayout))
+                realPosition?.div(pageSize)?.plus(1)
         else realPosition?.div(pageSize)?.minus(1)
         if (newPage in minPage..maxPage) adapter?.loadPage(newPage ?: 0)
     }
