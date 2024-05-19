@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 
 class ItemViewModel : ViewModel() {
-    var itemRepository = ItemRepository()
+    private var itemRepository = ItemRepository()
     var itemList = MutableLiveData<List<Item>>()
 
     init {
@@ -18,7 +18,7 @@ class ItemViewModel : ViewModel() {
 
     }
 
-    fun addItemsToList() {
+    private fun addItemsToList() {
         CoroutineScope(Dispatchers.Main).launch {
             itemList.value = itemRepository.addItemsToList()
 
