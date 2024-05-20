@@ -1,7 +1,9 @@
 package com.mj.dgtqproject.ui.item.adapter
 
+import android.content.ClipData
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mj.dgtqproject.data.item.model.Item
@@ -10,10 +12,9 @@ import com.mj.dgtqproject.ui.item.fragment.ItemLayoutProperties
 
 class ItemAdapter(
     private var context: Context,
-    var itemList: List<Item>,
+    var itemList: MutableList<Item>,
     private val itemLayoutProperties: ItemLayoutProperties
-) : RecyclerView.Adapter<ItemAdapter.CardViewHolder>() {
-
+) : RecyclerView.Adapter<ItemAdapter.CardViewHolder>(), IItemAdapter {
     private var currentPage = 0
     private val itemsPerPage = itemLayoutProperties.pageSize
 
@@ -37,6 +38,14 @@ class ItemAdapter(
         val view = holder.view
 
         view.tvName.text = product.name
+
+        holder.itemView.setOnLongClickListener { v ->
+            val clipData = ClipData.newPlainText("", "")
+            val dragShadowBuilder = View.DragShadowBuilder(v)
+            v.tag = positionRearrangedToFirstlyFillWholeColumn
+            v.startDragAndDrop(clipData, dragShadowBuilder, v, 0)
+            true
+        }
     }
 
     fun loadPage(page: Int) {
@@ -44,7 +53,7 @@ class ItemAdapter(
         notifyDataSetChanged()
     }
 
-    fun getPositionRearrangedToFirstlyFillWholeColumn(position: Int): Int {
+    override fun getPositionRearrangedToFirstlyFillWholeColumn(position: Int): Int {
         val totalItems = itemList.size
         val totalFullPages = totalItems / itemsPerPage
         val itemsOnLastPage = totalItems % itemsPerPage
@@ -69,5 +78,19 @@ class ItemAdapter(
         val row = position / itemLayoutProperties.columnCount
         val column = position % itemLayoutProperties.columnCount
         return currentPage * itemsPerPage + column * (itemsPerPage / itemLayoutProperties.columnCount) + row
+    }
+
+    override fun getItem(position: Int): Item {
+        return itemList[position]
+    }
+
+    override fun removeItem(position: Int) {
+        itemList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    override fun addItem(position: Int, item: Item) {
+        itemList.add(position, item)
+        notifyItemInserted(position)
     }
 }

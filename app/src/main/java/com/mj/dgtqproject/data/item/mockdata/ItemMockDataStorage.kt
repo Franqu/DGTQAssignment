@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 
 class ItemMockDataStorage {
     private val itemList = ArrayList<Item>()
-    suspend fun addItemsToList(): List<Item> = withContext(Dispatchers.IO) {
+    suspend fun addItemsToList(): MutableList<Item> = withContext(Dispatchers.IO) {
 
         for (i in 1..102 ){
             itemList.add(Item("Item$i"))

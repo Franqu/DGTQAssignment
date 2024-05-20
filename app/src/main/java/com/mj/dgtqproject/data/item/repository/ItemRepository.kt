@@ -6,5 +6,5 @@ import com.mj.dgtqproject.data.item.model.Item
 class ItemRepository {
     private var itemMockDataStorage = ItemMockDataStorage()
 
-    suspend fun addItemsToList() : List<Item> = itemMockDataStorage.addItemsToList()
+    suspend fun addItemsToList() : MutableList<Item> = itemMockDataStorage.addItemsToList()
 }

@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mj.dgtqproject.ui.item.adapter.ItemAdapter
 import com.mj.dgtqproject.ui.item.fragment.ItemLayoutProperties
 
-class ItemSnapHelper(private val itemLayoutProperties : ItemLayoutProperties) : LinearSnapHelper() {
+class ItemSnapHelper(private val itemLayoutProperties: ItemLayoutProperties) : LinearSnapHelper() {
 
     private var recyclerView: RecyclerView? = null
     private val pageSize = itemLayoutProperties.pageSize
@@ -35,7 +35,7 @@ class ItemSnapHelper(private val itemLayoutProperties : ItemLayoutProperties) : 
         val newPage =
             if ((velocityX > 0 && !itemLayoutProperties.reverseLayout) || (velocityX < 0 && itemLayoutProperties.reverseLayout))
                 realPosition?.div(pageSize)?.plus(1)
-        else realPosition?.div(pageSize)?.minus(1)
+            else realPosition?.div(pageSize)?.minus(1)
         if (newPage in minPage..maxPage) adapter?.loadPage(newPage ?: 0)
     }
 

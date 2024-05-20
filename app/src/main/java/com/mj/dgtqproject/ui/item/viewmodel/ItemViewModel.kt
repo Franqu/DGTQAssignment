@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class ItemViewModel : ViewModel() {
     private var itemRepository = ItemRepository()
-    var itemList = MutableLiveData<List<Item>>()
+    var itemList = MutableLiveData<MutableList<Item>>()
 
     init {
         addItemsToList()

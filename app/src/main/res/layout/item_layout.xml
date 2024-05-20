@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cvItem"
         android:layout_width="50dp"
-        android:layout_height="match_parent"
+        android:layout_height="20dp"
         android:layout_marginStart="6dp"
         card_view:cardBackgroundColor="#C0C0C0"
         card_view:cardCornerRadius="5dp"
@@ -19,8 +19,6 @@
                 android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 android:singleLine="true"
